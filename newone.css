@@ -1,0 +1,198 @@
+/* Reset */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* Base */
+html { scroll-behavior: smooth; } /* smooth scrolling for anchor links */
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #f4f4f4;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* NAVBAR (hidden initially) */
+.top-banner {
+  position: fixed;
+  left: 0;
+  width: 100%;
+  height: 120px;           /* visually ~1 inch on many displays */
+  background-color: #d4f1bc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+
+  /* hide off-screen to start */
+  transform: translateY(0%);
+  opacity: 1;
+}
+
+/* navbar layout */
+.navbar {
+  width: 90%;
+  max-width: 11000px;
+  display:flex;
+  justify-content:space-between;
+  align-items: center;
+}
+
+/* image left (as in your provided HTML) */
+.profile-container { display:flex; align-items:center; }
+.profile-image {
+  width: 100px;
+  height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #caffda;
+}
+
+/* links on right */
+.nav-links { list-style:none; display:flex; gap: 2rem; align-items:center; }
+.nav-links a {
+  color: #373d3d;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.15rem;
+  transition: color .2s;
+}
+.nav-links a:hover { color: #0a4b36; }
+
+/* SECTION styling - add top-padding to allow for fixed navbar when visible
+   We use scroll-margin-top to ensure anchors land nicely whether nav is visible or not.
+*/
+.section {
+  padding: 200px 6% 80px;
+  min-height: 100vh;
+  display: block;
+}
+.section .container { max-width: 1000px; margin: 0 auto; }
+
+#about { scroll-margin-top: 30px; }
+#experience { scroll-margin-top: 30px; }
+#projects { scroll-margin-top: 30px; }
+
+/* headings */
+h1, h2 { color: #0a4b36; margin-bottom: .7rem; }
+
+/* content styles */
+.about p { margin-bottom: 1rem; font-size: 1.05rem; }
+
+.exp-item { margin-bottom: 1.25rem; }
+.project-item {
+  background: #e9f8ea;
+  border-left: 5px solid #6ecb63;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  transition: transform .25s;
+}
+.project-item:hover { transform: translateY(-6px); }
+
+/* footer */
+footer {
+  text-align:center;
+  padding: 2rem;
+  background: #d4f1bc;
+  color: #0a4b36;
+}
+
+/* Responsive tweaks */
+@media (max-width: 720px) {
+  .profile-image { width: 70px; height: 70px; }
+  .nav-links { gap: 1rem; font-size: .95rem; }
+  .section { padding-top: 140px; }
+}
+
+/* === Year-Split Timeline Styles === */
+.year-timeline { position: relative; margin: 2.5rem 0; }
+
+/* Row layout: left / center / right */
+.timeline-row {
+  display: grid;
+  grid-template-columns: 1fr 80px 1fr;
+  gap: 1rem;
+  align-items: start;
+  margin: 1.5rem 0;
+  position: relative;
+
+  /* reveal defaults */
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity .45s ease, transform .45s cubic-bezier(.2,.9,.2,1);
+}
+
+/* when visible */
+.timeline-row.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* center line full height via pseudo (we'll show a thin line behind dots) */
+.year-timeline::before {
+  content: '';
+  position: absolute;
+  left: calc(50% - 3px);
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  background: linear-gradient(180deg, var(--accent) 0%, #AEDFA8 100%);
+  border-radius: 3px;
+  box-shadow: 0 0 10px rgba(108,203,99,0.06);
+  z-index: 1;
+}
+
+/* center cell: place dot */
+.timeline-center { display:flex; align-items:flex-start; justify-content:center; position:relative; z-index:3; }
+/* the dot sits on the center line */
+.center-dot {
+  width: 18px; height: 18px;
+  background: var(--nav-bg);
+  border: 4px solid var(--accent);
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(46,58,41,0.12);
+  margin-top: 6px;
+}
+
+/* left / right columns */
+.timeline-left, .timeline-right { z-index: 2; }
+.card {
+  background: var(--secondary);
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0 6px 18px rgba(17,34,15,0.06);
+  border-left: 4px solid rgba(108,203,99,0.12);
+  color: var(--text);
+}
+
+/* Year label inside left card */
+.row-year {
+  display:block;
+  font-weight:700;
+  color: var(--accent);
+  margin-bottom: 0.4rem;
+  font-size: 0.95rem;
+}
+
+/* headings and muted text */
+.card h3 { margin: 0 0 .45rem; color: var(--text); }
+.muted { color: var(--muted); font-size: .95rem; }
+
+/* ensure readable lists */
+.card ul { margin-top: .5rem; padding-left: 18px; }
+
+/* Responsive: on small screens stack vertically */
+@media (max-width: 860px) {
+  .timeline-row {
+    grid-template-columns: 1fr;
+    gap: 0.6rem;
+    padding-left: 56px; /* space for the vertical line/dot */
+  }
+
+  .timeline-center { position: absolute; left: 24px; top: 6px; }
+  .row-year { font-size: 0.95rem; }
+  .year-timeline::before { left: 24px; }
+  .timeline-row { margin: 1.25rem 0; }
+}
+
+/* accessibility focus */
+.timeline-row:focus { outline: 3px solid rgba(108,203,99,0.14); outline-offset: 6px; }
