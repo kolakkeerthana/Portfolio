@@ -1,0 +1,258 @@
+/* ====================================================
+   newone.css
+   Palette: formal + colorful (navy base, teal + amber accents)
+   Comments added for clarity.
+   ==================================================== */
+
+/* --------- Variables / Palette --------- */
+:root{
+  /* Base */
+  --bg: #FBFCFE;            /* very light blue-white */
+  --nav-bg: #0b2340;        /* deep navy for header */
+  --text: #0f1f2d;          /* dark charcoal-blue for primary text */
+  --muted: #6B7280;         /* neutral muted gray */
+  /* Accents */
+  --accent: #177E89;        /* teal (primary accent) */
+  --accent-warm: #F6A623;   /* amber/yellow highlight */
+  --card-bg: #FFFFFF;       /* card background */
+  --card-soft: #F3FAFB;     /* subtle soft card tint */
+  --card-radius: 10px;
+  --max-width: 1100px;
+}
+
+
+
+
+
+/* --------- Reset & base --------- */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: "Inter", "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* --------- Top banner / nav --------- */
+/* Header sits above everything to avoid overlap issues */
+.top-banner {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100px;                 /* slightly smaller for space economy */
+  background: linear-gradient(180deg, var(--nav-bg), #082034 90%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;                /* <- ensures nav always above timeline/cards */
+  box-shadow: 0 6px 20px rgba(2,10,23,0.12);
+}
+
+/* Navbar inner layout */
+.navbar{
+  width: 90%;
+  max-width: var(--max-width);
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Profile image on left */
+.profile-image{
+  width: 90px;
+  height: 84px;
+  object-fit: cover;
+  border-radius: 999px;
+  border: 2px solid rgba(255,255,255,0.08);
+  background: linear-gradient(135deg, rgba(255,255,255,0.02), rgba(0,0,0,0.03));
+}
+
+/* Nav links */
+.nav-links{ list-style:none; display:flex; gap:1.25rem; align-items:center; }
+.nav-links a{
+  color: #EAF6FF; /* pale sky for contrast on navy */
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.12rem;
+  padding: .25rem .4rem;
+  border-radius: 6px;
+}
+.nav-links a:hover{
+  background: rgba(255,255,255,0.035);
+  color: var(--accent-warm);
+}
+
+/* --------- Section base (reduced vertical spacing) --------- */
+.section{
+  padding: 120px 6% 30px;  /* top reduced to 100px, bottom to 48px */
+  min-height: auto;
+}
+.container{ max-width: var(--max-width); margin: 0 auto; }
+
+/* Container uses Flexbox to place children side-by-side */
+.education-container {
+  display: flex;
+  justify-content: space-evenly; /* Pushes content and image to opposite ends */
+  align-items: flex-start; /* Aligns items to the top */
+  gap: 20px; /* Adds space between the content and the image */
+}
+
+/* Styles for the image container */
+.grad-photo {
+  flex: 1; /* Photo div will take up remaining space */
+  max-width: 300px; /* Limits the max size of the photo container */
+  text-align: right; /* Aligns the image within its container to the right */
+}
+
+/* Styles for the image itself */
+.grad-photo img {
+  width: 100%; /* Image takes the full width of its parent (.grad-photo div) */
+  aspect-ratio: 1 / 1; /* This makes the image perfectly square */
+  object-fit: cover; /* Ensures the image covers the square area without stretching */
+  border-radius: 10px; /* Optional: Adds slightly rounded corners */
+}
+
+
+
+
+
+/* Headings */
+h1 { font-size: 2rem; margin-bottom: .45rem; color: var(--nav-bg); }
+h2 { font-size: 1.5rem; margin-bottom: .6rem; color: var(--nav-bg); }
+.muted { color: var(--muted); font-size: .95rem; }
+
+/* Small helper */
+.small { font-size: .9rem; color: var(--muted); }
+
+/* ========= Single-column Experience Timeline ========= */
+/* Put the vertical line near the left at start of the section (120px) */
+.year-timeline {
+  position: relative;
+  margin: 1.2rem 0;
+}
+
+/* vertical line position is fixed at 120px from left (desktop) */
+.year-timeline::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 58px;             /* <-- move line to left */
+  width: 4px;
+  background: linear-gradient(180deg, var(--accent) 100%, rgba(23,126,137,0.15) 0%);
+  border-radius: 3px;
+  z-index: 1;
+  box-shadow: 0 0 14px rgba(23,126,137,0.06);
+}
+
+/* Each timeline entry: left = center column (for dot), right = content */
+.timeline-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;               /* space between line and content (~2rem) */
+  margin: 1.4rem 0;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity .45s ease, transform .45s cubic-bezier(.2,.9,.2,1);
+  z-index: 2;              /* below top-banner but above background */
+}
+
+/* reveal state */
+.timeline-row.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* center column: sets width so line and dot align */
+.timeline-center {
+  position: relative;
+  flex: 0 0 120px;         /* same offset as ::before left */
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  z-index: 2;
+}
+
+/* dot aligned to the center of the vertical line */
+.center-dot {
+  width: 18px;
+  height: 18px;
+  background: var(--accent);
+  border: 4px solid var(--accent);
+  border-radius: 50%;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 6px;
+  box-shadow: 0 6px 18px rgba(23,126,137,0.12);
+}
+
+/* content card sits to the right of the line */
+.timeline-content {
+  flex: 1;
+  background: var(--card-bg);
+  border-radius: var(--card-radius);
+  padding: 1rem 1.1rem;
+  box-shadow: 0 8px 22px rgba(10,20,30,0.04);
+  border-left: 4px solid rgba(23,126,137,0.10);
+  z-index: 2;
+}
+.row-year { display:block; color: var(--accent); font-weight:700; margin-bottom:.3rem; }
+
+/* ========= Projects grid ========= */
+.projects-grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap:1rem; margin-top:0.75rem;
+}
+.project-card{
+  background: var(--card-bg);
+  border-radius: 10px;
+  padding: .95rem;
+  box-shadow: 0 8px 24px rgba(10,20,30,0.04);
+  border-left: 5px solid var(--accent);
+}
+.project-card h3{ margin-bottom:.4rem; }
+.project-card p{ color:var(--muted); margin-bottom:.75rem; }
+
+/* actions */
+.card-actions{ display:flex; gap:.6rem; align-items:center; }
+.btn{
+  display:inline-block; padding:.45rem .8rem; background:var(--accent); color:#fff; border-radius:8px; text-decoration:none; font-weight:600;
+  box-shadow:0 8px 18px rgba(23,126,137,0.12);
+}
+.btn:hover{ background: #0f6a71; }
+.link-muted{ color:var(--muted); font-size:.95rem; text-decoration:underline; }
+
+/* ========= Leadership & Interests ========= */
+.leadership-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:1rem; margin-top:.8rem; }
+.lead-card{ background:var(--card-soft); padding:1rem; border-radius:12px; border-left: 4px solid rgba(23,126,137,0.10); }
+
+.interests-list{ display:grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap:1rem; margin-top:.8rem; }
+.interest{ background:var(--card-bg); padding:1rem; border-radius:8px; box-shadow:0 6px 14px rgba(10,20,30,0.03); }
+
+/* footer */
+footer{ text-align:center; padding:1.25rem; background: linear-gradient(180deg, rgba(11,35,64,0.03), transparent); color: var(--muted); margin-top:1.75rem; }
+
+/* ========= Accessibility & small screen tweaks ========= */
+.timeline-row:focus, .project-card:focus, .lead-card:focus{ outline: 3px solid rgba(23,126,137,0.12); outline-offset:6px; }
+
+/* Mobile: move line to 56px from left and stack content */
+@media (max-width: 860px) {
+  .year-timeline::before { left: 56px; }
+  .timeline-center { flex: 0 0 56px; }
+  .timeline-row { gap: 1rem; padding-left: 0; }
+  .center-dot { left: 50%; transform: translateX(-50%); top: 4px; }
+  .section{ padding: 120px 5% 40px; }
+}
+
+/* Extra-small: collapse nav links (you can add hamburger later) */
+@media (max-width: 480px) {
+  .nav-links{ display:none; }
+  .profile-image{ width:64px; height:64px; }
+  .section{ padding-top:120px; }
+}
